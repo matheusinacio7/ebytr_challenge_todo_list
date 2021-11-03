@@ -4,8 +4,8 @@ import { getTokenPair, refreshTokenPair, revoke } from '@token';
 import { compare, hash } from '@crypto';
 import { ValidationError } from '@errors';
 
-const mapPrivateInfo = ({ email, username, tasks }: Record<string, unknown>) => (
-  { email, username, tasks }
+const mapPrivateInfo = ({ email, username }: Record<string, unknown>) => (
+  { email, username }
 );
 
 const create = (userData: any) => {
@@ -15,7 +15,6 @@ const create = (userData: any) => {
     .then((hashedPassword) => User.insertOne({
       ...userData,
       password: hashedPassword,
-      tasks: [],
     }))
     .then(() => {
       const { username } = userData;
