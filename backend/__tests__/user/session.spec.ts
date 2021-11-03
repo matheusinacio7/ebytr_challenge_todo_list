@@ -42,7 +42,7 @@ describe('POST /users/session (login)', () => {
     await connect()
       .then((db) => db.collection('users').insertOne({
         ...validData,
-        admin: false,
+        todos: [],
         password: hashedPassword,
       }));
   });
@@ -99,7 +99,6 @@ describe('POST /users/session (login)', () => {
 
         const access = decode(cookies.access_token) as JwtPayload;
         expect(access.type).toBe('access');
-        expect(access.admin).toBe(false);
         expect(access.username).toBe(validData.username);
         const accessExp = Math.round(ms(SETTINGS.access_token_lifetime) / 1000);
         const actualAccessExp = (access.exp as number) - (access.iat as number);

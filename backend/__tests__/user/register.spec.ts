@@ -80,13 +80,13 @@ describe('POST /users (register)', () => {
       .then(({
         username,
         email,
-        admin,
+        tasks,
         password,
       }) => {
         expect(username).toBe(validData.username);
         expect(email).toBe(validData.email);
         expect(password).not.toBe(validData.password);
-        expect(admin).toBe(false);
+        expect(tasks).toEqual([]);
       }));
   });
 });
