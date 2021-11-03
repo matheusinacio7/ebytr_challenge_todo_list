@@ -4,7 +4,7 @@ import addFormats from 'ajv-formats';
 
 import { ValidationError } from '@errors';
 
-import { user as userSchemas } from './schemas';
+import { user as userSchemas, task as taskSchemas } from './schemas';
 
 const ajv = new Ajv({ allErrors: true });
 
@@ -14,6 +14,7 @@ addFormats(ajv);
 const schemas = {
   createUser: userSchemas.create,
   loginUser: userSchemas.login,
+  createTask: taskSchemas.create,
 };
 
 type CompiledSchemas = {
