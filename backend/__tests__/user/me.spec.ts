@@ -85,12 +85,10 @@ describe('GET /users/me', () => {
         const {
           username,
           email,
-          tasks,
           password,
         } = res.body;
         expect(username).toBe(validData.username);
         expect(email).toBe(validData.email);
-        expect(tasks).toEqual([]);
         expect(password).toBe(undefined);
       }));
   });
