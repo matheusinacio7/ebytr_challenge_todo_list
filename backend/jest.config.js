@@ -11,6 +11,7 @@ const config = {
     '@models': ['<rootDir>/src/models'],
     '@routers': ['<rootDir>/src/routers'],
     '@token': ['<rootDir>/src/services/token'],
+    '@types': ['<rootDir>/src/types'],
     '@utils': ['<rootDir>/src/utils'],
     '@validation': ['<rootDir>/src/services/validation'],
   },

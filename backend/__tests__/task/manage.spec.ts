@@ -4,6 +4,8 @@ import { describe, expect, it } from '@jest/globals';
 import request from 'supertest';
 import { ObjectId } from 'mongodb';
 
+import type { Task } from '../../src/types';
+
 import app from '../../app';
 import connect, { disconnect } from '../../src/models/connect';
 import { closeCacheServer } from '../../src/middlewares/withCache';
@@ -18,16 +20,6 @@ afterAll(async () => {
 });
 
 const url = '/task';
-
-type Task = {
-  title: string;
-  description: string;
-  createdAt: number;
-  lastModifiedAt: number;
-  status: 'to_do' | 'in_progress' | 'done';
-  username: string;
-};
-
 const isEqualWithErrorMargin = (a : number, b : number, error : number) => {
   const absoluteDifference = Math.abs(a - b);
   return absoluteDifference < error;
