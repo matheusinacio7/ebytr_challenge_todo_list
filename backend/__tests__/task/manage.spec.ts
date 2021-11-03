@@ -95,5 +95,67 @@ describe('POST /task (create task)', () => {
           expect(foundTask.username).toBe(validUser.username);
         });
     });
+
+    it('only title', async () => {
+      let id : string;
+
+      await request(app)
+        .post(url)
+        .set('Authorization', accessToken)
+        .send({ title: validTask.title })
+        .expect(201)
+        .expect((res) => {
+          expect(res.body.insertedTask.id).not.toBeUndefined();
+          id = res.body.insertedTask.id;
+        });
+
+      await connect()
+        .then((db) => db.collection('tasks'))
+        .then((collection) => collection.findOne(new ObjectId(id)) as Promise<Task>)
+        .then((foundTask : Task) => {
+          expect(foundTask.title).toBe(validTask.title);
+          expect(foundTask.description).toBeUndefined();
+          expect(isEqualWithErrorMargin(
+            foundTask.createdAt,
+            new Date().valueOf(),
+            600000,
+          )).toBe(true);
+
+          expect(foundTask.createdAt).toBe(foundTask.lastModifiedAt);
+          expect(foundTask.status).toBe('to_do');
+          expect(foundTask.username).toBe(validUser.username);
+        });
+    });
+
+    it('only description', async () => {
+      let id : string;
+
+      await request(app)
+        .post(url)
+        .set('Authorization', accessToken)
+        .send({ description: validTask.description })
+        .expect(201)
+        .expect((res) => {
+          expect(res.body.insertedTask.id).not.toBeUndefined();
+          id = res.body.insertedTask.id;
+        });
+
+      await connect()
+        .then((db) => db.collection('tasks'))
+        .then((collection) => collection.findOne(new ObjectId(id)) as Promise<Task>)
+        .then((foundTask : Task) => {
+          expect(foundTask.title).toBeUndefined();
+          expect(foundTask.description).toBe(validTask.description);
+          expect(isEqualWithErrorMargin(
+            foundTask.createdAt,
+            new Date().valueOf(),
+            600000,
+          )).toBe(true);
+
+          expect(foundTask.createdAt).toBe(foundTask.lastModifiedAt);
+          expect(foundTask.status).toBe('to_do');
+          expect(foundTask.username).toBe(validUser.username);
+        });
+    });
   });
 });
