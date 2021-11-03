@@ -90,7 +90,7 @@ describe('GET /users/me', () => {
         } = res.body;
         expect(username).toBe(validData.username);
         expect(email).toBe(validData.email);
-        expect(tasks).toBe([]);
+        expect(tasks).toEqual([]);
         expect(password).toBe(undefined);
       }));
   });
