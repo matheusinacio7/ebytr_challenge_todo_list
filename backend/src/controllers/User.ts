@@ -4,8 +4,8 @@ import { getTokenPair, refreshTokenPair, revoke } from '@token';
 import { compare, hash } from '@crypto';
 import { ValidationError } from '@errors';
 
-const mapPrivateInfo = ({ email, username, admin }: Record<string, unknown>) => (
-  { email, username, admin }
+const mapPrivateInfo = ({ email, username, tasks }: Record<string, unknown>) => (
+  { email, username, tasks }
 );
 
 const create = (userData: any) => {
@@ -15,11 +15,11 @@ const create = (userData: any) => {
     .then((hashedPassword) => User.insertOne({
       ...userData,
       password: hashedPassword,
-      admin: false,
+      tasks: [],
     }))
     .then(() => {
       const { username } = userData;
-      const tokens = getTokenPair({ username, admin: false });
+      const tokens = getTokenPair({ username });
       return { ...tokens };
     });
 };
@@ -37,7 +37,7 @@ const login = (userData: any) => {
   return getUser()
     .then((user) => Promise.all([Promise.resolve(user), compare(password, user.password)]))
     .then(([user]) => {
-      const tokens = getTokenPair({ username: user.username, admin: user.admin });
+      const tokens = getTokenPair({ username: user.username });
       return { ...tokens };
     });
 };
