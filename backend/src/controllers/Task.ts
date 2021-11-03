@@ -14,7 +14,8 @@ const create = (coreTaskInfo: Pick<Task, 'title' | 'username' | 'description'>) 
 
   validate('createTask', newTask);
 
-  return Model.insertOne(newTask);
+  return Model.insertOne(newTask)
+    .then(({ insertedId }) => ({ ...newTask, id: insertedId }));
 };
 
 export default {

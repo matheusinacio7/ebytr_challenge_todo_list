@@ -9,7 +9,7 @@ const create = {
     username: { type: 'string', minLength: 3, maxLength: 100 },
   },
   additionalProperties: false,
-  oneOf: [
+  anyOf: [
     { required: ['title', 'createdAt', 'lastModifiedAt', 'status', 'username'] },
     { required: ['description', 'createdAt', 'lastModifiedAt', 'status', 'username'] },
   ],

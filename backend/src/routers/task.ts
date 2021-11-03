@@ -14,8 +14,8 @@ router.post('/', validateToken, (req, res, next) => {
   };
 
   Controller.create(newTask)
-    .then((result) => {
-      res.status(201).json({ insertedTask: result, message: 'Task created successfully.' });
+    .then((insertedTask) => {
+      res.status(201).json({ insertedTask, message: 'Task created successfully.' });
     })
     .catch(next);
 });

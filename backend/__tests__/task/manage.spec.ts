@@ -74,8 +74,8 @@ describe('POST /task (create task)', () => {
         .send(validTask)
         .expect(201)
         .expect((res) => {
-          expect(res.body.id).not.toBeUndefined();
-          id = res.body.id;
+          expect(res.body.insertedTask.id).not.toBeUndefined();
+          id = res.body.insertedTask.id;
         });
 
       await connect()
