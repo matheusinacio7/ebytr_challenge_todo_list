@@ -17,6 +17,7 @@ app.use(
 
 app.use('/', routers.root);
 app.use('/users', routers.user);
+app.use('/task', routers.task);
 
 app.use(catchInvalidEndpoint);
 
