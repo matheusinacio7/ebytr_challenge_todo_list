@@ -25,6 +25,7 @@ type Task = {
   createdAt: number;
   lastModifiedAt: number;
   status: 'to_do' | 'in_progress' | 'done';
+  username: string;
 };
 
 const isEqualWithErrorMargin = (a : number, b : number, error : number) => {
@@ -99,6 +100,7 @@ describe('POST /task (create task)', () => {
 
           expect(foundTask.createdAt).toBe(foundTask.lastModifiedAt);
           expect(foundTask.status).toBe('to_do');
+          expect(foundTask.username).toBe(validUser.username);
         });
     });
   });
