@@ -20,7 +20,16 @@
         "consistent-return": "off",
         "import/prefer-default-export": "off",
         "import/extensions": "off",
-        "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+        "max-len": [
+            "error",
+            {
+                "code": 110,
+                "ignoreComments": true,
+                "ignoreStrings": true,
+                "ignoreTemplateLiterals": true,
+                "ignoreRegExpLiterals": true
+            }],
+        "no-unused-vars": ["error", { "varsIgnorePattern": "^_" }],
         "no-console": "off",
         "prefer-rest-params": "off"
     },
