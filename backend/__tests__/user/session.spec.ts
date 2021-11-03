@@ -10,6 +10,7 @@ import * as jwt from 'jsonwebtoken';
 
 import app from '../../app';
 import connect, { disconnect } from '../../src/models/connect';
+import { hash } from '../../src/services/crypto';
 import { closeCacheServer } from '../../src/middlewares/withCache';
 import { closeBlacklistServer, SETTINGS } from '../../src/services/token';
 
@@ -34,6 +35,17 @@ describe('POST /users/session (login)', () => {
     email: 'janete@corca.com',
     password: '123janete456corca',
   };
+
+  beforeEach(async () => {
+    const hashedPassword = await hash(validData.password);
+
+    await connect()
+      .then((db) => db.collection('users').insertOne({
+        ...validData,
+        admin: false,
+        password: hashedPassword,
+      }));
+  });
 
   afterEach(async () => {
     await connect()
