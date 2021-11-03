@@ -21,7 +21,7 @@
         "import/prefer-default-export": "off",
         "import/extensions": "off",
         "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
-        "no-console": ["error", { "allow": ["error"] }],
+        "no-console": "off",
         "prefer-rest-params": "off"
     },
     "ignorePatterns": ["node_modules", "__coverage__"],
