@@ -29,7 +29,7 @@
                 "ignoreTemplateLiterals": true,
                 "ignoreRegExpLiterals": true
             }],
-        "no-unused-vars": ["error", { "varsIgnorePattern": "^_" }],
+        "no-unused-vars": ["error", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
         "no-console": "off",
         "prefer-rest-params": "off"
     },
