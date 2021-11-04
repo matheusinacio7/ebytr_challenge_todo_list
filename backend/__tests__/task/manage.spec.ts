@@ -64,6 +64,13 @@ describe('POST /task (create task)', () => {
       .then((db) => db.collection('tasks').deleteMany({}));
   });
 
+  describe('With invalid data, throws errors', () => {
+    it('unauthenticated user', () => request(app)
+      .post(url)
+      .send(validTask)
+      .expect(401));
+  });
+
   describe('With valid data, creates a task in the db', () => {
     it('title and description', async () => {
       let id : string;
