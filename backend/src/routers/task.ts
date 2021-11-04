@@ -20,4 +20,12 @@ router.post('/', validateToken, (req, res, next) => {
     .catch(next);
 });
 
+router.delete('/:id', validateToken, (req, res, next) => {
+  Controller.deleteById(req.params.id)
+    .then((taskId) => {
+      res.status(200).json({ deletedTask: { id: taskId }, message: 'Task deleted successfully.' });
+    })
+    .catch(next);
+});
+
 export default router;
