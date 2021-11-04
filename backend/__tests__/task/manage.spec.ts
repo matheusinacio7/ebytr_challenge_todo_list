@@ -172,3 +172,81 @@ describe('POST /task (create task)', () => {
     });
   });
 });
+
+describe('DELETE /task (delete task)', () => {
+  const validUser = {
+    username: 'janete_corca',
+    email: 'janete@corca.com',
+    password: '123janete456corca',
+  };
+
+  const validTask = {
+    title: 'demolish buildings',
+    description: 'today is a good day to demolish some stuff! I love my job',
+  };
+
+  let insertedTask : Task;
+
+  let accessToken : string;
+
+  beforeEach(async () => {
+    await request(app)
+      .post('/users')
+      .send(validUser)
+      .expect(201)
+      .then((response) => {
+        const cookies = (response.headers['set-cookie'] as Array<string>).reduce((acc : Record<string, string>, cookie : string) => {
+          const [type, fullDescription] = cookie.split('=');
+          const [value, ..._rest] = fullDescription.split(';');
+          acc[type] = value;
+          return acc;
+        }, {});
+
+        accessToken = cookies.access_token;
+      });
+
+    await request(app)
+      .post(url)
+      .set('Authorization', accessToken)
+      .send(validTask)
+      .expect(201)
+      .expect((res) => {
+        expect(res.body.insertedTask.id).not.toBeUndefined();
+        insertedTask = res.body.insertedTask;
+      });
+  });
+
+  afterEach(async () => {
+    await connect()
+      .then((db) => db.collection('users').deleteMany({}));
+
+    await connect()
+      .then((db) => db.collection('tasks').deleteMany({}));
+  });
+
+  describe('With invalid data, throws errors', () => {
+    it('unauthenticated user', () => request(app)
+      .post(url)
+      .send(validTask)
+      .expect(401));
+  });
+
+  describe('With a valid id, deletes the task from the db', () => {
+    it('title and description', async () => {
+      await request(app)
+        .delete(`${url}/${insertedTask.id}`)
+        .set('Authorization', accessToken)
+        .expect(200)
+        .expect((res) => {
+          expect(res.body.deletedTask.id).toBe(insertedTask.id);
+        });
+
+      await connect()
+        .then((db) => db.collection('tasks'))
+        .then((collection) => collection.findOne(new ObjectId(insertedTask.id)) as Promise<unknown>)
+        .then((foundTask) => {
+          expect(foundTask).toBe(null);
+        });
+    });
+  });
+});

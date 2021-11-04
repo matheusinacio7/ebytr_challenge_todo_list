@@ -5,4 +5,5 @@ export type Task = {
   lastModifiedAt: number;
   status: 'to_do' | 'in_progress' | 'done';
   username: string;
+  id?: string;
 };
