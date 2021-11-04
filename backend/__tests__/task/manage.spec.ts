@@ -3,6 +3,7 @@
 import { describe, expect, it } from '@jest/globals';
 import request from 'supertest';
 import { ObjectId } from 'mongodb';
+import FakeTimers from '@sinonjs/fake-timers';
 
 import type { Task } from '../../src/types';
 
@@ -173,7 +174,7 @@ describe('POST /task (create task)', () => {
   });
 });
 
-describe('DELETE /task (delete task)', () => {
+describe('DELETE /task/:id (delete task)', () => {
   const validUser = {
     username: 'janete_corca',
     email: 'janete@corca.com',
@@ -235,8 +236,8 @@ describe('DELETE /task (delete task)', () => {
       .expect(404));
   });
 
-  describe('With a valid id, deletes the task from the db', () => {
-    it('title and description', async () => {
+  describe('With a valid id', () => {
+    it('deletes the task from the db', async () => {
       await request(app)
         .delete(`${url}/${insertedTask.id}`)
         .set('Authorization', accessToken)
@@ -250,6 +251,158 @@ describe('DELETE /task (delete task)', () => {
         .then((collection) => collection.findOne(new ObjectId(insertedTask.id)) as Promise<unknown>)
         .then((foundTask) => {
           expect(foundTask).toBe(null);
+        });
+    });
+  });
+});
+
+describe('PUT /task/:id (update task)', () => {
+  const validUser = {
+    username: 'janete_corca',
+    email: 'janete@corca.com',
+    password: '123janete456corca',
+  };
+
+  const validTask = {
+    title: 'demolish buildings',
+    description: 'today is a good day to demolish some stuff! I love my job',
+  };
+
+  let insertedTask : Task;
+
+  let accessToken : string;
+
+  let clock : FakeTimers.InstalledClock;
+
+  beforeEach(async () => {
+    clock = FakeTimers.install();
+
+    await request(app)
+      .post('/users')
+      .send(validUser)
+      .expect(201)
+      .then((response) => {
+        const cookies = (response.headers['set-cookie'] as Array<string>).reduce((acc : Record<string, string>, cookie : string) => {
+          const [type, fullDescription] = cookie.split('=');
+          const [value, ..._rest] = fullDescription.split(';');
+          acc[type] = value;
+          return acc;
+        }, {});
+
+        accessToken = cookies.access_token;
+      });
+
+    await request(app)
+      .post(url)
+      .set('Authorization', accessToken)
+      .send(validTask)
+      .expect(201)
+      .expect((res) => {
+        expect(res.body.insertedTask.id).not.toBeUndefined();
+        insertedTask = res.body.insertedTask;
+      });
+  });
+
+  afterEach(async () => {
+    await connect()
+      .then((db) => db.collection('users').deleteMany({}));
+
+    await connect()
+      .then((db) => db.collection('tasks').deleteMany({}));
+
+    clock.uninstall();
+  });
+
+  describe('With invalid data, throws errors', () => {
+    it('unauthenticated user', () => request(app)
+      .put(`${url}/${insertedTask.id}`)
+      .expect(401));
+
+    it('invalid id', () => request(app)
+      .put(`${url}/1389sfjkng`)
+      .set('Authorization', accessToken)
+      .expect(404));
+
+    it('no field', () => request(app)
+      .put(`${url}/${insertedTask.id}`)
+      .set('Authorization', accessToken)
+      .send({})
+      .expect(422));
+
+    it('invalid status', () => request(app)
+      .put(`${url}/${insertedTask.id}`)
+      .set('Authorization', accessToken)
+      .send({ status: 'vamonessa' })
+      .expect(422));
+  });
+
+  describe('With valid data, updates correctly', () => {
+    it('single field', async () => {
+      const now = new Date();
+      const then = new Date(now.getTime() + 600000);
+      clock.setSystemTime(then);
+
+      await request(app)
+        .put(`${url}/${insertedTask.id}`)
+        .set('Authorization', accessToken)
+        .send({ status: 'in_progress' })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body.updatedTask.before).toEqual({ status: 'to_do' });
+          expect(res.body.updatedTask.after).toEqual({ status: 'in_progress' });
+          expect(res.body.message).not.toBeUndefined();
+        });
+
+      await connect()
+        .then((db) => db.collection('tasks'))
+        .then((collection) => collection.findOne(new ObjectId(insertedTask.id)) as Promise<Task>)
+        .then((foundTask) => {
+          expect(foundTask.title).toBe(insertedTask.title);
+          expect(foundTask.description).toBe(insertedTask.description);
+          expect(foundTask.status).toBe('in_progress');
+          expect(foundTask.createdAt).toBe(insertedTask.createdAt);
+          expect(isEqualWithErrorMargin(
+            foundTask.lastModifiedAt,
+            new Date().getTime(),
+            60000,
+          )).toBe(true);
+        });
+    });
+
+    it('multiple fields', async () => {
+      const now = new Date();
+      const then = new Date(now.getTime() + 600000);
+      const updatedData = {
+        status: 'done',
+        title: 'find a new home',
+      };
+
+      clock.setSystemTime(then);
+
+      await request(app)
+        .put(`${url}/${insertedTask.id}`)
+        .set('Authorization', accessToken)
+        .send(updatedData)
+        .expect(200)
+        .expect((res) => {
+          expect(res.body.updatedTask.before).toEqual({ status: 'to_do', title: insertedTask.title });
+          expect(res.body.updatedTask.after).toEqual(updatedData);
+          expect(res.body.message).not.toBeUndefined();
+        });
+
+      await connect()
+        .then((db) => db.collection('tasks'))
+        .then((collection) => collection.findOne(new ObjectId(insertedTask.id)) as Promise<Task>)
+        .then((foundTask) => {
+          expect(foundTask.title).toBe(updatedData.title);
+          expect(foundTask.description).toBe(insertedTask.description);
+          expect(foundTask.status).toBe(updatedData.status);
+          expect(foundTask.createdAt).toBe(insertedTask.createdAt);
+          expect(isEqualWithErrorMargin(
+            foundTask.lastModifiedAt,
+            new Date().getTime(),
+            60000,
+          )).toBe(true);
         });
     });
   });
