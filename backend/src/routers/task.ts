@@ -7,7 +7,9 @@ import { validateToken } from '@middlewares';
 
 const router = Router();
 
-router.post('/', validateToken, (req, res, next) => {
+router.use(validateToken);
+
+router.post('/', (req, res, next) => {
   const newTask = {
     ...req.body as Pick<Task, 'title' | 'description'>,
     username: res.locals.username,
@@ -20,10 +22,18 @@ router.post('/', validateToken, (req, res, next) => {
     .catch(next);
 });
 
-router.delete('/:id', validateToken, (req, res, next) => {
+router.delete('/:id', (req, res, next) => {
   Controller.deleteById(req.params.id)
     .then((taskId) => {
       res.status(200).json({ deletedTask: { id: taskId }, message: 'Task deleted successfully.' });
+    })
+    .catch(next);
+});
+
+router.put('/:id', (req, res, next) => {
+  Controller.updateById(req.params.id)
+    .then((result) => {
+      res.status(200).end();
     })
     .catch(next);
 });
