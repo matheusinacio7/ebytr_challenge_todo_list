@@ -69,6 +69,12 @@ describe('POST /task (create task)', () => {
       .post(url)
       .send(validTask)
       .expect(401));
+
+    it('with no title or description', () => request(app)
+      .post(url)
+      .set('Authorization', accessToken)
+      .send({})
+      .expect(422));
   });
 
   describe('With valid data, creates a task in the db', () => {
