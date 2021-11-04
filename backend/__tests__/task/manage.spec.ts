@@ -226,9 +226,12 @@ describe('DELETE /task (delete task)', () => {
 
   describe('With invalid data, throws errors', () => {
     it('unauthenticated user', () => request(app)
-      .post(url)
-      .send(validTask)
+      .delete(url)
       .expect(401));
+
+    it('invalid id', () => request(app)
+      .delete(`${url}/1389sfjkng`)
+      .expect(404));
   });
 
   describe('With a valid id, deletes the task from the db', () => {
