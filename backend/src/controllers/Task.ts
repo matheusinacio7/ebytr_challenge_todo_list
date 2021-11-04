@@ -1,4 +1,6 @@
 import { ObjectId } from 'mongodb';
+import type { RequireAtLeastOne } from 'type-fest';
+
 import { Task as Model } from '@models';
 import { validate } from '@validation';
 import type { Task } from '@types';
@@ -36,7 +38,24 @@ const deleteById = (taskId: string) => {
     });
 };
 
+const updateById = (taskId: string, updatedData: RequireAtLeastOne<Pick<Task, 'description' | 'title' | 'status'>>) => {
+  if (!ObjectId.isValid(taskId)) {
+    throw new NotFoundError('Task not found.');
+  }
+
+  const updatedTask = {
+    ...updatedData,
+    lastModifiedAt: new Date().getTime(),
+  };
+
+  validate('updateTask', updatedTask);
+
+  return Model.updateOneById(taskId, updatedTask)
+    .then(console.log);
+};
+
 export default {
   create,
   deleteById,
+  updateById,
 };

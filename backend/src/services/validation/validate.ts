@@ -15,6 +15,7 @@ const schemas = {
   createUser: userSchemas.create,
   loginUser: userSchemas.login,
   createTask: taskSchemas.create,
+  updateTask: taskSchemas.update,
 };
 
 type CompiledSchemas = {
