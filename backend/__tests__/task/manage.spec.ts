@@ -5,6 +5,8 @@ import request from 'supertest';
 import { ObjectId } from 'mongodb';
 import FakeTimers from '@sinonjs/fake-timers';
 
+import { decode, JwtPayload } from 'jsonwebtoken';
+
 import type { Task } from '../../src/types';
 
 import app from '../../app';
@@ -343,6 +345,21 @@ describe('PUT /task/:id (update task)', () => {
       clock.setSystemTime(then);
 
       await request(app)
+        .post('/users')
+        .send(validUser)
+        .expect(201)
+        .then((response) => {
+          const cookies = (response.headers['set-cookie'] as Array<string>).reduce((acc : Record<string, string>, cookie : string) => {
+            const [type, fullDescription] = cookie.split('=');
+            const [value, ..._rest] = fullDescription.split(';');
+            acc[type] = value;
+            return acc;
+          }, {});
+
+          accessToken = cookies.access_token;
+        });
+
+      await request(app)
         .put(`${url}/${insertedTask.id}`)
         .set('Authorization', accessToken)
         .send({ status: 'in_progress' })
@@ -378,6 +395,21 @@ describe('PUT /task/:id (update task)', () => {
       };
 
       clock.setSystemTime(then);
+
+      await request(app)
+        .post('/users')
+        .send(validUser)
+        .expect(201)
+        .then((response) => {
+          const cookies = (response.headers['set-cookie'] as Array<string>).reduce((acc : Record<string, string>, cookie : string) => {
+            const [type, fullDescription] = cookie.split('=');
+            const [value, ..._rest] = fullDescription.split(';');
+            acc[type] = value;
+            return acc;
+          }, {});
+
+          accessToken = cookies.access_token;
+        });
 
       await request(app)
         .put(`${url}/${insertedTask.id}`)
