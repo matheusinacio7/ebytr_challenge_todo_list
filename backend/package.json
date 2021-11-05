@@ -2,7 +2,7 @@
 	"name": "create-node-api",
 	"author": "Set",
 	"main": "index.ts",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"license": "MIT",
 	"engines": {
 		"node": "14.x"
