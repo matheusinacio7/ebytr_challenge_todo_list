@@ -27,8 +27,13 @@ const updateOneById = (
   .then(getCollection)
   .then((collection) => collection.findOneAndUpdate({ _id: new ObjectId(taskId) }, { $set: updatedData }));
 
+const getOneById = (taskId: string) => connect()
+  .then(getCollection)
+  .then((collection) => collection.findOne({ _id: new ObjectId(taskId) }));
+
 export default {
   insertOne,
   deleteOneById,
   updateOneById,
+  getOneById,
 };
