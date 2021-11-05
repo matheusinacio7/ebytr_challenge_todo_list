@@ -68,8 +68,26 @@ const updateById = (taskId: string, updatedData: RequireAtLeastOne<Pick<Task, 'd
     });
 };
 
+const getOneById = (taskId: string) => {
+  if (!ObjectId.isValid(taskId)) {
+    throw new NotFoundError('Task not found.');
+  }
+
+  return Model.getOneById(taskId)
+    .then((result) => {
+      if (!result) {
+        throw new NotFoundError('Task not found.');
+      }
+
+      const { _id, ...rest } = result;
+
+      return { id: _id, ...rest };
+    });
+};
+
 export default {
   create,
   deleteById,
   updateById,
+  getOneById,
 };
