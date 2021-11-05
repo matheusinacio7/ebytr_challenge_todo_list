@@ -1,13 +1,13 @@
 # EbTaskier - Backend
 
-## Recursos
+# Recursos
 
-### Usuários
+## Usuários
 
 Sistema de cadastro de usuários com email, senha e nome de usuário.
 Usa par de tokens bearer de acesso/refresh.
 
-#### Endpoints
+### Endpoints
 
 Autorização:
 
@@ -85,3 +85,75 @@ Caso um token de refresh seja reutilizado (depois de ser invalidado), toda a ár
 Invalida o token enviado.
 
 Caso o token seja de refresh, a árvore inteira é invalidada, efetivamente fazendo logout da sessão.
+
+
+## Tarefas
+
+Todos os endpoints de tarefas precisam de autenticação.
+
+### Endpoints
+
+> ### POST /tasks
+> 
+> Auth: Bearer Access Token
+> JSON Body: (JSON Schema)
+> ```js
+> {
+>  type: 'object',
+>  properties: {
+>    title: { type: 'string', minLength: 1, maxLength: 100 },
+>    description: { type: 'string', minLength: 1, maxLength: 500 },
+>  },
+>  additionalProperties: false,
+>  anyOf: [
+>    { required: ['title'] },
+>    { required: ['description'] },
+>  ],
+>};
+> ```
+
+Cria uma nova task com o status de `to_do`.
+
+> ### PUT /tasks/:id
+> 
+> Auth: Bearer Access Token
+> JSON Body: (JSON Schema)
+> ```js
+> {
+>  type: 'object',
+>  properties: {
+>    title: { type: 'string', minLength: 1, maxLength: 100 },
+>    description: { type: 'string', minLength: 1, maxLength: 500 },
+>    status: { type: 'string', pattern: 'to_do|in_progress|done' }
+>  },
+>  additionalProperties: false,
+>  anyOf: [
+>    { required: ['title'] },
+>    { required: ['description'] },
+>    { required: ['status'] },
+>  ],
+>};
+> ```
+
+Atualiza a task com o id informado.
+
+> ### GET /tasks/:id
+> 
+> Auth: Bearer Access Token
+> Sem corpo
+
+Retorna a task com o id informado.
+
+> ### GET /tasks
+> 
+> Auth: Bearer Access Token
+> Sem corpo
+
+Retorna todas as tasks do usuário
+
+> ### DELETE /tasks/:id
+> 
+> Auth: Bearer Access Token
+> Sem corpo
+
+Exclui a task com o id informado.
