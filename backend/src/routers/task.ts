@@ -22,6 +22,14 @@ router.post('/', (req, res, next) => {
     .catch(next);
 });
 
+router.get('/:id', (req, res, next) => {
+  Controller.getOneById(req.params.id)
+    .then((foundTask) => {
+      res.status(200).json({ task: foundTask });
+    })
+    .catch(next);
+});
+
 router.delete('/:id', (req, res, next) => {
   Controller.deleteById(req.params.id)
     .then((taskId) => {
