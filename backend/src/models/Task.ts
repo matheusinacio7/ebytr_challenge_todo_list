@@ -31,9 +31,14 @@ const getOneById = (taskId: string) => connect()
   .then(getCollection)
   .then((collection) => collection.findOne({ _id: new ObjectId(taskId) }));
 
+const getAllUserTasks = (username: string) => connect()
+  .then(getCollection)
+  .then((collection) => collection.find({ username }));
+
 export default {
   insertOne,
   deleteOneById,
   updateOneById,
   getOneById,
+  getAllUserTasks,
 };
