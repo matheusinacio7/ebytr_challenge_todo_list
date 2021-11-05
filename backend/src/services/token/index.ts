@@ -64,7 +64,7 @@ class Blacklist {
   #client;
 
   constructor() {
-    this.#client = createClient();
+    this.#client = createClient({ url: process.env.REDIS_URL as string });
   }
 
   async connect() {

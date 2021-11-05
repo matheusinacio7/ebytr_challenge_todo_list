@@ -5,7 +5,7 @@ import type {
   NextFunction,
 } from 'express';
 
-const client = createClient();
+const client = createClient({ url: process.env.REDIS_URL as string });
 client.connect();
 
 type CacheOptions = {
