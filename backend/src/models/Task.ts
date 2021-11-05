@@ -33,7 +33,7 @@ const getOneById = (taskId: string) => connect()
 
 const getAllUserTasks = (username: string) => connect()
   .then(getCollection)
-  .then((collection) => collection.find({ username }));
+  .then((collection) => collection.find({ username }).toArray());
 
 export default {
   insertOne,

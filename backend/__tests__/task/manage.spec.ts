@@ -447,7 +447,7 @@ describe('PUT /task/:id (update task)', () => {
   });
 });
 
-describe('GET /task/:id (update task)', () => {
+describe('GET /task/:id (get single task)', () => {
   const validUser = {
     username: 'janete_corca',
     email: 'janete@corca.com',
@@ -527,7 +527,7 @@ describe('GET /task/:id (update task)', () => {
   });
 });
 
-describe('GET /task (update task)', () => {
+describe('GET /task (get all tasks)', () => {
   const validUser = {
     username: 'janete_corca',
     email: 'janete@corca.com',

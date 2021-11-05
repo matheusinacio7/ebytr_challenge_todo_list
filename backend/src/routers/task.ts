@@ -12,7 +12,7 @@ router.use(validateToken);
 router.get('/', (_req, res, next) => {
   Controller.getAllByUsername(res.locals.username)
     .then((allTasks) => {
-      res.status(200).json(allTasks);
+      res.status(200).json({ taskList: allTasks });
     })
     .catch(next);
 });

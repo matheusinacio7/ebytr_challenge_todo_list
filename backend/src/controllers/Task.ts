@@ -85,7 +85,8 @@ const getOneById = (taskId: string) => {
     });
 };
 
-const getAllByUsername = (username: string) => Model.getAllUserTasks(username);
+const getAllByUsername = (username: string) => Model.getAllUserTasks(username)
+  .then((allTasks) => allTasks.map(({ _id, ...rest }) => ({ id: _id, ...rest })));
 
 export default {
   create,
