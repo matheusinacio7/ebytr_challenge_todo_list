@@ -27,9 +27,9 @@ afterAll(async () => {
   await disconnect();
 });
 
-const url = '/user/session';
+const url = '/users/session';
 
-describe('POST /user/session (login)', () => {
+describe('POST /users/session (login)', () => {
   const validData = {
     username: 'janete_corca',
     email: 'janete@corca.com',
@@ -107,7 +107,7 @@ describe('POST /user/session (login)', () => {
   });
 });
 
-describe('DELETE /user/session (logout)', () => {
+describe('DELETE /users/session (logout)', () => {
   const validData = {
     username: 'janete_corca',
     email: 'janete@corca.com',
@@ -119,7 +119,7 @@ describe('DELETE /user/session (logout)', () => {
 
   beforeEach(async () => {
     await request(app)
-      .post('/user')
+      .post('/users')
       .send(validData)
       .expect(201)
       .then((response) => {
@@ -173,7 +173,7 @@ describe('DELETE /user/session (logout)', () => {
       });
 
     await request(app)
-      .get('/user/me')
+      .get('/users/me')
       .set('Authorization', accessToken)
       .expect(401)
       .then((res) => {
@@ -187,7 +187,7 @@ describe('DELETE /user/session (logout)', () => {
       .set('Authorization', refreshToken);
 
     await request(app)
-      .get('/user/me')
+      .get('/users/me')
       .set('Authorization', accessToken)
       .expect(401)
       .then((res) => {
@@ -196,7 +196,7 @@ describe('DELETE /user/session (logout)', () => {
   });
 });
 
-describe('PUT /user/session (refresh)', () => {
+describe('PUT /users/session (refresh)', () => {
   const validData = {
     username: 'janete_corca',
     email: 'janete@corca.com',
@@ -208,7 +208,7 @@ describe('PUT /user/session (refresh)', () => {
 
   beforeEach(async () => {
     await request(app)
-      .post('/user')
+      .post('/users')
       .send(validData)
       .expect(201)
       .then((response) => {
@@ -262,7 +262,7 @@ describe('PUT /user/session (refresh)', () => {
 
   it('with a valid token, returns a new, valid, token pair', async () => {
     await request(app)
-      .get('/user/me')
+      .get('/users/me')
       .set('Authorization', accessToken)
       .expect(200);
 
@@ -286,7 +286,7 @@ describe('PUT /user/session (refresh)', () => {
       });
 
     await request(app)
-      .get('/user/me')
+      .get('/users/me')
       .set('Authorization', newAccessToken)
       .expect(200);
 

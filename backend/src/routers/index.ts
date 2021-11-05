@@ -1,3 +1,3 @@
 export { default as root } from './root';
-export { default as user } from './user';
-export { default as task } from './task';
+export { default as users } from './users';
+export { default as tasks } from './tasks';

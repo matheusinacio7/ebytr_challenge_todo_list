@@ -18,9 +18,9 @@ afterAll(async () => {
   await closeBlacklistServer();
 });
 
-const url = '/user/me';
+const url = '/users/me';
 
-describe('GET /user/me', () => {
+describe('GET /users/me', () => {
   const validData = {
     username: 'janete_corca',
     email: 'janete@corca.com',
@@ -32,7 +32,7 @@ describe('GET /user/me', () => {
 
   beforeEach(async () => {
     await request(app)
-      .post('/user')
+      .post('/users')
       .send(validData)
       .expect(201)
       .then((response) => {

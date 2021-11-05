@@ -20,13 +20,13 @@ afterAll(async () => {
   await disconnect();
 });
 
-const url = '/task';
+const url = '/tasks';
 const isEqualWithErrorMargin = (a : number, b : number, error : number) => {
   const absoluteDifference = Math.abs(a - b);
   return absoluteDifference < error;
 };
 
-describe('POST /task (create task)', () => {
+describe('POST /tasks (create task)', () => {
   const validUser = {
     username: 'janete_corca',
     email: 'janete@corca.com',
@@ -42,7 +42,7 @@ describe('POST /task (create task)', () => {
 
   beforeEach(async () => {
     await request(app)
-      .post('/user')
+      .post('/users')
       .send(validUser)
       .expect(201)
       .then((response) => {
@@ -174,7 +174,7 @@ describe('POST /task (create task)', () => {
   });
 });
 
-describe('DELETE /task/:id (delete task)', () => {
+describe('DELETE /tasks/:id (delete task)', () => {
   const validUser = {
     username: 'janete_corca',
     email: 'janete@corca.com',
@@ -192,7 +192,7 @@ describe('DELETE /task/:id (delete task)', () => {
 
   beforeEach(async () => {
     await request(app)
-      .post('/user')
+      .post('/users')
       .send(validUser)
       .expect(201)
       .then((response) => {
@@ -256,7 +256,7 @@ describe('DELETE /task/:id (delete task)', () => {
   });
 });
 
-describe('PUT /task/:id (update task)', () => {
+describe('PUT /tasks/:id (update task)', () => {
   const validUser = {
     username: 'janete_corca',
     email: 'janete@corca.com',
@@ -283,7 +283,7 @@ describe('PUT /task/:id (update task)', () => {
     clock = FakeTimers.install();
 
     await request(app)
-      .post('/user')
+      .post('/users')
       .send(validUser)
       .expect(201)
       .then((response) => {
@@ -356,7 +356,7 @@ describe('PUT /task/:id (update task)', () => {
       clock.setSystemTime(then);
 
       await request(app)
-        .post('/user')
+        .post('/users')
         .send(validUser)
         .expect(201)
         .then((response) => {
@@ -404,7 +404,7 @@ describe('PUT /task/:id (update task)', () => {
       clock.setSystemTime(then);
 
       await request(app)
-        .post('/user')
+        .post('/users')
         .send(validUser)
         .expect(201)
         .then((response) => {
@@ -447,7 +447,7 @@ describe('PUT /task/:id (update task)', () => {
   });
 });
 
-describe('GET /task/:id (get single task)', () => {
+describe('GET /tasks/:id (get single task)', () => {
   const validUser = {
     username: 'janete_corca',
     email: 'janete@corca.com',
@@ -465,7 +465,7 @@ describe('GET /task/:id (get single task)', () => {
 
   beforeEach(async () => {
     await request(app)
-      .post('/user')
+      .post('/users')
       .send(validUser)
       .expect(201)
       .then((response) => {
@@ -527,7 +527,7 @@ describe('GET /task/:id (get single task)', () => {
   });
 });
 
-describe('GET /task (get all tasks)', () => {
+describe('GET /tasks (get all tasks)', () => {
   const validUser = {
     username: 'janete_corca',
     email: 'janete@corca.com',
@@ -551,7 +551,7 @@ describe('GET /task (get all tasks)', () => {
 
   beforeEach(async () => {
     await request(app)
-      .post('/user')
+      .post('/users')
       .send(validUser)
       .expect(201)
       .then((response) => {
