@@ -1,5 +1,21 @@
 # EbTaskier - Backend
 
+O Backend está deployado na seguinte URL:
+https://eb-taskier.herokuapp.com/
+
+A URL raíz não possui método algum, então ela retorna um erro caso seja acessada pelo browser.
+
+O sistema usa Redis para manejo de blacklist de tokens e MongoDB para persistência de dados.
+
+O deploy foi feito no Heroku, com o plugin de Redis e o banco de dados deployado no próprio Atlas.
+
+Se você quiser rodar na sua máquina local, as dependências são:
+
+* Node, preferencialmente versão 14.x +
+* MongoDB
+* Redis
+* Yarn (é possível mudar os scripts para usarem npm)
+
 # Recursos
 
 ## Usuários
