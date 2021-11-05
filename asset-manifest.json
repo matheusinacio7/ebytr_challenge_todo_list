@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/ebytr_challenge_todo_list/static/css/main.8c8b27cf.chunk.css",
+    "main.js": "/ebytr_challenge_todo_list/static/js/main.211737ae.chunk.js",
+    "main.js.map": "/ebytr_challenge_todo_list/static/js/main.211737ae.chunk.js.map",
+    "runtime-main.js": "/ebytr_challenge_todo_list/static/js/runtime-main.769c55f7.js",
+    "runtime-main.js.map": "/ebytr_challenge_todo_list/static/js/runtime-main.769c55f7.js.map",
+    "static/js/2.fa9ea962.chunk.js": "/ebytr_challenge_todo_list/static/js/2.fa9ea962.chunk.js",
+    "static/js/2.fa9ea962.chunk.js.map": "/ebytr_challenge_todo_list/static/js/2.fa9ea962.chunk.js.map",
+    "static/js/3.2bb8242a.chunk.js": "/ebytr_challenge_todo_list/static/js/3.2bb8242a.chunk.js",
+    "static/js/3.2bb8242a.chunk.js.map": "/ebytr_challenge_todo_list/static/js/3.2bb8242a.chunk.js.map",
+    "index.html": "/ebytr_challenge_todo_list/index.html",
+    "static/css/main.8c8b27cf.chunk.css.map": "/ebytr_challenge_todo_list/static/css/main.8c8b27cf.chunk.css.map",
+    "static/js/2.fa9ea962.chunk.js.LICENSE.txt": "/ebytr_challenge_todo_list/static/js/2.fa9ea962.chunk.js.LICENSE.txt",
+    "static/media/logo.6ce24c58.svg": "/ebytr_challenge_todo_list/static/media/logo.6ce24c58.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.769c55f7.js",
+    "static/js/2.fa9ea962.chunk.js",
+    "static/css/main.8c8b27cf.chunk.css",
+    "static/js/main.211737ae.chunk.js"
+  ]
+}
