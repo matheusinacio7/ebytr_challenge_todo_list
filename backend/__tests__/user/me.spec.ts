@@ -18,9 +18,9 @@ afterAll(async () => {
   await closeBlacklistServer();
 });
 
-const url = '/users/me';
+const url = '/user/me';
 
-describe('GET /users/me', () => {
+describe('GET /user/me', () => {
   const validData = {
     username: 'janete_corca',
     email: 'janete@corca.com',
@@ -32,7 +32,7 @@ describe('GET /users/me', () => {
 
   beforeEach(async () => {
     await request(app)
-      .post('/users')
+      .post('/user')
       .send(validData)
       .expect(201)
       .then((response) => {
@@ -85,12 +85,10 @@ describe('GET /users/me', () => {
         const {
           username,
           email,
-          admin,
           password,
         } = res.body;
         expect(username).toBe(validData.username);
         expect(email).toBe(validData.email);
-        expect(admin).toBe(false);
         expect(password).toBe(undefined);
       }));
   });

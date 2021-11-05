@@ -16,9 +16,9 @@ afterAll(async () => {
   await closeBlacklistServer();
 });
 
-const url = '/users';
+const url = '/user';
 
-describe('POST /users (register)', () => {
+describe('POST /user (register)', () => {
   const validData = {
     username: 'janete_corca',
     email: 'janete@corca.com',
@@ -80,13 +80,11 @@ describe('POST /users (register)', () => {
       .then(({
         username,
         email,
-        admin,
         password,
       }) => {
         expect(username).toBe(validData.username);
         expect(email).toBe(validData.email);
         expect(password).not.toBe(validData.password);
-        expect(admin).toBe(false);
       }));
   });
 });

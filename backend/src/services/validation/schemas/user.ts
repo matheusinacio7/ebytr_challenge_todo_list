@@ -3,7 +3,6 @@ const create = {
   properties: {
     username: { type: 'string', minLength: 3, maxLength: 100 },
     password: { type: 'string', minLength: 6, maxLength: 36 },
-    // email pattern by https://emailregex.com/
     email: { type: 'string', maxLength: 256, format: 'email' },
   },
   required: ['username', 'password', 'email'],
@@ -15,7 +14,6 @@ const login = {
   properties: {
     username: { type: 'string', minLength: 3, maxLength: 100 },
     password: { type: 'string', minLength: 6, maxLength: 36 },
-    // email pattern by https://emailregex.com/
     email: { type: 'string', maxLength: 256, format: 'email' },
   },
   additionalProperties: false,

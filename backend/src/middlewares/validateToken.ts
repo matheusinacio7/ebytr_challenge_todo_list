@@ -12,9 +12,8 @@ const validateToken : Handler = async (req, res, next) => {
   const tokenBody = token.replace('Bearer ', '');
 
   try {
-    const { username, admin } = await verifyAccessToken(tokenBody);
+    const { username } = await verifyAccessToken(tokenBody);
     res.locals.username = username;
-    res.locals.admin = admin;
     res.locals.token = tokenBody;
     next();
   } catch {
