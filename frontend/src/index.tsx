@@ -1,28 +1,36 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Router, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { store } from './store';
 import { Home } from './pages';
+import { Layout } from './components';
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={ store }>
       <BrowserRouter>
-        <Route
-          path="/"
-          element={ <Home /> }
-        />
-        <Route
-          path="*"
-          element={
-            <main>
-              <p>Opa... nada por aqui.</p>
-            </main>
-          }
-        />
+        <Routes>
+          <Route
+            path="/"
+            element={ <Layout /> }
+          >
+            <Route
+              path="/"
+              element={ <Home /> }
+            />
+            <Route
+              path="*"
+              element={
+                <main>
+                  <p>Opa... nada por aqui.</p>
+                </main>
+              }
+            />
+          </Route>
+        </Routes>
       </BrowserRouter>
     </Provider>
   </React.StrictMode>,
