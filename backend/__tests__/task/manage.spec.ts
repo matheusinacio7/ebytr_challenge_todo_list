@@ -503,30 +503,15 @@ describe('GET /task/:id (update task)', () => {
       .put(`${url}/${insertedTask.id}`)
       .expect(401));
 
-    // it('invalid id', () => request(app)
-    //   .put(`${url}/1389sfjkng`)
-    //   .set('Authorization', accessToken)
-    //   .expect(404));
+    it('invalid id', () => request(app)
+      .get(`${url}/1389sfjkng`)
+      .set('Authorization', accessToken)
+      .expect(404));
 
-    // ! erro de timeout estranho ao validar dados
-
-    // it('not found id', () => request(app)
-    //   .put(`${url}/${new ObjectId().toString()}`)
-    //   .set('Authorization', accessToken)
-    //   .send(updatedData)
-    //   .expect(404));
-
-    // it('no field', () => request(app)
-    //   .put(`${url}/${insertedTask.id}`)
-    //   .set('Authorization', accessToken)
-    //   .send({})
-    //   .expect(422));
-
-    // it('invalid status', () => request(app)
-    //   .put(`${url}/${insertedTask.id}`)
-    //   .set('Authorization', accessToken)
-    //   .send({ status: 'vamonessa' })
-    //   .expect(422));
+    it('not found id', () => request(app)
+      .get(`${url}/${new ObjectId().toString()}`)
+      .set('Authorization', accessToken)
+      .expect(404));
   });
 
   describe('With a valid ID', () => {
