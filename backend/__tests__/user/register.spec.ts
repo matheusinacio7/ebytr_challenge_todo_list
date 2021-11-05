@@ -16,9 +16,9 @@ afterAll(async () => {
   await closeBlacklistServer();
 });
 
-const url = '/users';
+const url = '/user';
 
-describe('POST /users (register)', () => {
+describe('POST /user (register)', () => {
   const validData = {
     username: 'janete_corca',
     email: 'janete@corca.com',

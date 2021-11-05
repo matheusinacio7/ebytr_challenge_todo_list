@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongodb';
+import type { Document } from 'mongodb';
 import type { RequireAtLeastOne } from 'type-fest';
 
 import { Task as Model } from '@models';
@@ -19,7 +20,7 @@ const create = (coreTaskInfo: Pick<Task, 'title' | 'username' | 'description'>) 
 
   validate('createTask', newTask);
 
-  return Model.insertOne(newTask)
+  return Model.insertOne({ ...newTask })
     .then(({ insertedId }) => ({ ...newTask, id: insertedId.toString() }));
 };
 
@@ -50,8 +51,22 @@ const updateById = (taskId: string, updatedData: RequireAtLeastOne<Pick<Task, 'd
 
   validate('updateTask', updatedTask);
 
-  return Model.updateOneById(taskId, updatedTask)
-    .then(console.log);
+  return Model.updateOneById(taskId, { ...updatedTask })
+    .then((result) => {
+      if (!result) {
+        throw new NotFoundError('Task not found.');
+      }
+      const modifiedDoc = result.value as Task;
+
+      const after = { ...updatedData };
+      const before : Partial<Task> = {};
+
+      (Object.keys(after) as Array<keyof typeof after>).forEach((key) => {
+        before[key] = modifiedDoc[key] as any;
+      });
+
+      return { before, after };
+    });
 };
 
 export default {

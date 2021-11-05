@@ -29,6 +29,10 @@ export default function validate(schema: keyof typeof schemas, data: any) {
     throw new Error('Invalid schema.');
   }
 
+  if (!data) {
+    throw new ValidationError('Null data.');
+  }
+
   if (!compiledSchemas[schema]) {
     compiledSchemas[schema] = ajv.compile(schemas[schema]);
   }

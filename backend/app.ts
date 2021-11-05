@@ -16,7 +16,7 @@ app.use(
 // Insert your routers here;
 
 app.use('/', routers.root);
-app.use('/users', routers.user);
+app.use('/user', routers.user);
 app.use('/task', routers.task);
 
 app.use(catchInvalidEndpoint);
