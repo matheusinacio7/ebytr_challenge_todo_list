@@ -1,12 +1,38 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { store } from './store';
+import { Home } from './pages';
+import { Layout } from './components';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={ store }>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={ <Layout /> }
+          >
+            <Route
+              path="/"
+              element={ <Home /> }
+            />
+            <Route
+              path="*"
+              element={
+                <main>
+                  <p>Opa... nada por aqui.</p>
+                </main>
+              }
+            />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
