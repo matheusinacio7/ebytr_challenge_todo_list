@@ -85,9 +85,12 @@ const getOneById = (taskId: string) => {
     });
 };
 
+const getAllByUsername = (username: string) => Model.getAllUserTasks(username);
+
 export default {
   create,
   deleteById,
   updateById,
   getOneById,
+  getAllByUsername,
 };
