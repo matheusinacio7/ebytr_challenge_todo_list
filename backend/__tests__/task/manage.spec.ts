@@ -526,3 +526,89 @@ describe('GET /task/:id (update task)', () => {
     });
   });
 });
+
+describe('GET /task (update task)', () => {
+  const validUser = {
+    username: 'janete_corca',
+    email: 'janete@corca.com',
+    password: '123janete456corca',
+  };
+
+  const validTask = {
+    title: 'demolish buildings',
+    description: 'today is a good day to demolish some stuff! I love my job',
+  };
+
+  const validTask2 = {
+    title: 'demolish buildings',
+    description: 'today is a good day to demolish some stuff! I love my job',
+  };
+
+  let insertedTask : Task;
+  let insertedTask2 : Task;
+
+  let accessToken : string;
+
+  beforeEach(async () => {
+    await request(app)
+      .post('/user')
+      .send(validUser)
+      .expect(201)
+      .then((response) => {
+        const cookies = (response.headers['set-cookie'] as Array<string>).reduce((acc : Record<string, string>, cookie : string) => {
+          const [type, fullDescription] = cookie.split('=');
+          const [value, ..._rest] = fullDescription.split(';');
+          acc[type] = value;
+          return acc;
+        }, {});
+
+        accessToken = cookies.access_token;
+      });
+
+    await request(app)
+      .post(url)
+      .set('Authorization', accessToken)
+      .send(validTask)
+      .expect(201)
+      .expect((res) => {
+        expect(res.body.insertedTask.id).not.toBeUndefined();
+        insertedTask = res.body.insertedTask;
+      });
+
+    await request(app)
+      .post(url)
+      .set('Authorization', accessToken)
+      .send(validTask2)
+      .expect(201)
+      .expect((res) => {
+        expect(res.body.insertedTask.id).not.toBeUndefined();
+        insertedTask2 = res.body.insertedTask;
+      });
+  });
+
+  afterEach(async () => {
+    await connect()
+      .then((db) => db.collection('users').deleteMany({}));
+
+    await connect()
+      .then((db) => db.collection('tasks').deleteMany({}));
+  });
+
+  describe('With invalid data, throws errors', () => {
+    it('unauthenticated user', () => request(app)
+      .put(`${url}/${insertedTask.id}`)
+      .expect(401));
+  });
+
+  describe('With valid data', () => {
+    it('gets all user tasks', async () => {
+      await request(app)
+        .get(url)
+        .set('Authorization', accessToken)
+        .expect(200)
+        .expect((res) => {
+          expect(res.body.taskList).toEqual([insertedTask, insertedTask2]);
+        });
+    });
+  });
+});
