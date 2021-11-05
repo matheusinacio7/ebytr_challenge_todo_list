@@ -446,3 +446,98 @@ describe('PUT /task/:id (update task)', () => {
     });
   });
 });
+
+describe('GET /task/:id (update task)', () => {
+  const validUser = {
+    username: 'janete_corca',
+    email: 'janete@corca.com',
+    password: '123janete456corca',
+  };
+
+  const validTask = {
+    title: 'demolish buildings',
+    description: 'today is a good day to demolish some stuff! I love my job',
+  };
+
+  let insertedTask : Task;
+
+  let accessToken : string;
+
+  beforeEach(async () => {
+    await request(app)
+      .post('/user')
+      .send(validUser)
+      .expect(201)
+      .then((response) => {
+        const cookies = (response.headers['set-cookie'] as Array<string>).reduce((acc : Record<string, string>, cookie : string) => {
+          const [type, fullDescription] = cookie.split('=');
+          const [value, ..._rest] = fullDescription.split(';');
+          acc[type] = value;
+          return acc;
+        }, {});
+
+        accessToken = cookies.access_token;
+      });
+
+    await request(app)
+      .post(url)
+      .set('Authorization', accessToken)
+      .send(validTask)
+      .expect(201)
+      .expect((res) => {
+        expect(res.body.insertedTask.id).not.toBeUndefined();
+        insertedTask = res.body.insertedTask;
+      });
+  });
+
+  afterEach(async () => {
+    await connect()
+      .then((db) => db.collection('users').deleteMany({}));
+
+    await connect()
+      .then((db) => db.collection('tasks').deleteMany({}));
+  });
+
+  describe('With invalid data, throws errors', () => {
+    it('unauthenticated user', () => request(app)
+      .put(`${url}/${insertedTask.id}`)
+      .expect(401));
+
+    // it('invalid id', () => request(app)
+    //   .put(`${url}/1389sfjkng`)
+    //   .set('Authorization', accessToken)
+    //   .expect(404));
+
+    // ! erro de timeout estranho ao validar dados
+
+    // it('not found id', () => request(app)
+    //   .put(`${url}/${new ObjectId().toString()}`)
+    //   .set('Authorization', accessToken)
+    //   .send(updatedData)
+    //   .expect(404));
+
+    // it('no field', () => request(app)
+    //   .put(`${url}/${insertedTask.id}`)
+    //   .set('Authorization', accessToken)
+    //   .send({})
+    //   .expect(422));
+
+    // it('invalid status', () => request(app)
+    //   .put(`${url}/${insertedTask.id}`)
+    //   .set('Authorization', accessToken)
+    //   .send({ status: 'vamonessa' })
+    //   .expect(422));
+  });
+
+  describe('With a valid ID', () => {
+    it('gets the correct task', async () => {
+      await request(app)
+        .get(`${url}/${insertedTask.id}`)
+        .set('Authorization', accessToken)
+        .expect(200)
+        .expect((res) => {
+          expect(res.body.task).toEqual(insertedTask);
+        });
+    });
+  });
+});
