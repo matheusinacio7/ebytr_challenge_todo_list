@@ -5,8 +5,6 @@ import request from 'supertest';
 import { ObjectId } from 'mongodb';
 import FakeTimers from '@sinonjs/fake-timers';
 
-import { decode, JwtPayload } from 'jsonwebtoken';
-
 import type { Task } from '../../src/types';
 
 import app from '../../app';

@@ -1,5 +1,4 @@
 import { ObjectId } from 'mongodb';
-import type { Document } from 'mongodb';
 import type { RequireAtLeastOne } from 'type-fest';
 
 import { Task as Model } from '@models';
